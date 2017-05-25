@@ -1,0 +1,28 @@
+{
+    "success": true,
+    "data": [{
+        "uid": "1",
+        "avatar": "1.jpg",
+        "nickname": "张三",
+        "bio": "Hello World! I am zhangSan.",
+        "blog": "zhangSan",
+        "following": 111,
+        "followers": 111
+    },{
+        "uid": "2",
+        "avatar": "2.jpg",
+        "nickname": "李四",
+        "bio": "Hello World! I am liSi.",
+        "blog": "liSi",
+        "following": 222,
+        "followers": 222
+    },{
+        "uid": "3",
+        "avatar": "3.jpg",
+        "nickname": "王五",
+        "bio": "Hello World! I am wangWu.",
+        "blog": "wangWu",
+        "following": 333,
+        "followers": 333
+    }]
+}

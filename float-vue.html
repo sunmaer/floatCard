@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>浮层卡片-Vue.js 2.0实现</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font: 13px/1 "Microsoft Yahei", "微软雅黑", "宋体", Arial, Verdana, sans-serif;
+            color: #666666;
+        }
+        .container {
+            margin: 100px auto;
+            padding: 0 20px;
+            width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        /* 卡片单项 */
+        .item {
+            display: inline-block; /* 触发BFC，避免float造成的父元素高度破坏 */
+            width: 100%;
+            padding: 20px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .item img {
+            float: left;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+        /* 卡片信息 */
+        .info {
+            float: left;
+            width: calc(100% - 80px);
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            padding: 0 10px;
+        }
+        /* 姓名 */
+        .info-name {
+            width: 50px;
+            position: relative; /* 设置位置参考点 */
+            cursor: pointer;
+        }
+        .info-name-text {
+            display: inline-block;
+            line-height: 50px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        /* 内容 */
+        .info-content {
+            line-height: 25px;
+        }
+        
+        /**
+         * 浮层卡片
+         * 利用css display属性实现
+         * 当鼠标移至姓名时，触发hover事件，显示 info-name 的 info-details 子元素，否则隐藏子元素
+         */
+         .info-details {
+             display: none;
+             position: absolute;
+             left: -140px;
+             bottom: 50px;
+             width: 300px;
+             padding: 10px;
+             background-color: #33A5FF;
+             border-radius: 8px;
+         }
+         .info-name:hover .info-details {
+            display: block;
+         }
+         .info-details:after { /* 利用伪元素实现三角形 */
+             content: '';
+             position: absolute;
+             left: 144px;
+             bottom: -12px;
+             width: 0;
+             height: 0;
+             border-bottom: 0;
+             border-top: 12px solid #33A5FF;
+             border-left: 12px solid transparent;
+             border-right: 12px solid transparent;
+         }
+         .info-details-header img {
+             margin: 0 10px 0 0;
+             width: 40px;
+             height: 40px;
+         }
+         .info-details-header span {
+             display: inline-block;
+             line-height: 40px;
+             font-size: 15px;
+             color: #fff;
+         }
+         .info-details-content {
+             margin-left: 10px;
+             color: #fff;
+         }
+         .info-details-content span {
+             display: inline-block;
+             margin-right: 10px;
+             line-height: 20px;
+         }
+
+    </style>
+
+</head>
+<body>
+    
+    <div class="container">
+        <div class="item" v-for="item in userList">
+            <img v-bind:src="item.avatar" v-bind:alt="item.nickname">
+            <div class="info">
+                <div class="info-name"><span class="info-name-text">{{ item.nickname }}</span>
+                    <div class="info-details">
+                        <div class="info-details-header">
+                            <img v-bind:src="item.avatar" v-bind:alt="item.nickname">
+                            <span class="nickname">{{ item.nickname }}</span>
+                        </div> 
+
+                        <div class="info-details-content">
+                            个人介绍：<span class="bio">{{ item.bio }}</span><br>
+                            微博：<span class="weibo">{{ item.blog }}</span>
+                            关注：<span class="following">{{ item.following }}</span>
+                            粉丝：<span class="followers">{{ item.followers }}</span>
+                        </div>
+                    </div> 
+                </div>
+                
+                <div class="info-content">当你的才华还撑不起你的野心时，那么你就应该静下心来学习。当你的才华还撑不起你的野心时，那么你就应该静下心来学习。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入vue -->
+    <script src="./lib/vue.min.js"></script>
+    <!-- 引入Vue-Resource -->
+    <script src="./lib/vue-resource.js"></script>
+    <script>
+
+        // 创建vue实例
+        new Vue({
+            el: '.container',
+            data: {
+                userList: []
+            },
+            mounted: function() {
+                this.$nextTick(function() {
+                    this.getUserList()
+                })
+            },
+            methods: {
+                getUserList: function() {
+                    // 利用vue-resource取data数据
+                    this.$http.get("data.json").then(res => {
+                        this.userList = res.data.data;
+                    })
+                }
+            }
+        })
+
+    </script>
+
+</body>
+</html>
